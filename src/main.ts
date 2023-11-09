@@ -47,14 +47,14 @@ function makePit(i: number, j: number) {
         MERRILL_CLASSROOM.lng + (j + 1) * TILE_DEGREES],
     ]);
 
-    const cache = leaflet.rectangle(bounds) as leaflet.Layer;
+    const pit = leaflet.rectangle(bounds) as leaflet.Layer;
 
     let coins = Math.floor(luck([i, j, "initialValue"].toString()) * 100);
 
-    cache.bindPopup(() => {
+    pit.bindPopup(() => {
         const container = document.createElement("div");
         container.innerHTML = `
-                <div>There is a cache here at "${i},${j}". It has <span id="coins">${coins}</span> geocoins.</div>
+                <div>There is a pit here at "${i},${j}". It has <span id="coins">${coins}</span> geocoins.</div>
                 <button id="collect">Collect</button>
                 <button id="deposit">Deposit</button>`;
         const collectButton = container.querySelector<HTMLButtonElement>("#collect")!;
@@ -80,7 +80,7 @@ function makePit(i: number, j: number) {
 
         return container;
     });
-    cache.addTo(map);
+    pit.addTo(map);
 }
 
 for (let i = -NEIGHBORHOOD_SIZE; i < NEIGHBORHOOD_SIZE; i++) {
