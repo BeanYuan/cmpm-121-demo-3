@@ -47,26 +47,40 @@ function makePit(i: number, j: number) {
         MERRILL_CLASSROOM.lng + (j + 1) * TILE_DEGREES],
     ]);
 
-    const pit = leaflet.rectangle(bounds) as leaflet.Layer;
+    const cache = leaflet.rectangle(bounds) as leaflet.Layer;
 
+    let coins = Math.floor(luck([i, j, "initialValue"].toString()) * 100);
 
-
-    pit.bindPopup(() => {
-        let value = Math.floor(luck([i, j, "initialValue"].toString()) * 100);
+    cache.bindPopup(() => {
         const container = document.createElement("div");
         container.innerHTML = `
-                <div>There is a pit here at "${i},${j}". It has value <span id="value">${value}</span>.</div>
-                <button id="poke">poke</button>`;
-        const poke = container.querySelector<HTMLButtonElement>("#poke")!;
-        poke.addEventListener("click", () => {
-            value--;
-            container.querySelector<HTMLSpanElement>("#value")!.innerHTML = value.toString();
-            points++;
-            statusPanel.innerHTML = `${points} points accumulated`;
+                <div>There is a cache here at "${i},${j}". It has <span id="coins">${coins}</span> geocoins.</div>
+                <button id="collect">Collect</button>
+                <button id="deposit">Deposit</button>`;
+        const collectButton = container.querySelector<HTMLButtonElement>("#collect")!;
+        const depositButton = container.querySelector<HTMLButtonElement>("#deposit")!;
+
+        collectButton.addEventListener("click", () => {
+            if (coins > 0) {
+                coins--;
+                points++;
+                container.querySelector<HTMLSpanElement>("#coins")!.innerHTML = coins.toString();
+                statusPanel.innerHTML = `${points} geocoins collected`;
+            }
         });
+
+        depositButton.addEventListener("click", () => {
+            if (points > 0) {
+                coins++;
+                points--;
+                container.querySelector<HTMLSpanElement>("#coins")!.innerHTML = coins.toString();
+                statusPanel.innerHTML = `${points} geocoins remaining`;
+            }
+        });
+
         return container;
     });
-    pit.addTo(map);
+    cache.addTo(map);
 }
 
 for (let i = -NEIGHBORHOOD_SIZE; i < NEIGHBORHOOD_SIZE; i++) {
