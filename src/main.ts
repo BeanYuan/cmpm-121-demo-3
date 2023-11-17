@@ -189,7 +189,7 @@ function regenerateCaches() {
     }
 }
 
-//regenerateCaches();
+regenerateCaches();
 
 document.getElementById("north")!.addEventListener("click", () => movePlayer(MOVE_STEP, 0));
 document.getElementById("south")!.addEventListener("click", () => movePlayer(-MOVE_STEP, 0));
