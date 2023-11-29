@@ -153,11 +153,12 @@ function makePit(i: number, j: number) {
         });
     
         depositButton.addEventListener("click", () => {
-            if (points > 0) {
-                pitState.coins.push(createCoin(cell.i, cell.j, pitState.coins.length));
+            if (points > 0 && collectedCoins.length > 0) {
+                const lastCollectedCoin = collectedCoins.pop();
+                pitState.coins.push(lastCollectedCoin);
                 points--;
                 container.querySelector<HTMLSpanElement>("#coins")!.innerHTML = pitState.coins.length.toString();
-                statusPanel.innerHTML = `${points} geocoins remaining`;
+                updateStatusPanel();
             }
         });
   
